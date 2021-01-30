@@ -2,7 +2,7 @@ import axios from 'axios'
 import 'antd/dist/antd.css'
 import './App.css'
 
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Form, Input, Button, Switch } from 'antd'
 
@@ -22,19 +22,28 @@ const tailLayout = {
 };
 
 const App = () => {
-  const onFinish = (values) => {
-    console.log('Success:', values)
-    axios.post('https://typ-back.herokuapp.com/api/users/register', {
-      "login": values.login,
-      "password": values.password,
-      "firstName": values.firstName,
-      "lastName": values.lastName,
-      "isAdmin": values.isAdmin,
-      "instagram": values.instagram,
-      "telegram": values.telegram,
-      "moduleId": 1
-    }).then((res) => localStorage.setItem('token', res.data.token))
-  };
+
+  const [login, setLogin] = useState(''),
+        [password, setPassword] = useState(''),
+        [firstName, setFirstName] = useState(''),
+        [lastName, setLastName] = useState(''),
+        [isAdmin, setIsAdmin] = useState(false),
+        [instagram, setInstagram] = useState(''),
+        [telegram, setTelegram] = useState('')
+
+    const onFinish = ({login, password, firstName, lastName, isAdmin, instagram, telegram}) => {
+      axios.post('https://typ-back.herokuapp.com/api/users/register', {
+        login,
+        password,
+        firstName,
+        lastName,
+        isAdmin,
+        instagram,
+        telegram,
+       "moduleId": 1
+    }).then(({data}) => localStorage.setItem('token', data.token))
+    }
+ 
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -60,7 +69,7 @@ const App = () => {
           },
         ]}
       >
-        <Input />
+        <Input value={login} onChange={(e) => setLogin(e.target.value)} />
       </Form.Item>
 
       <Form.Item
@@ -73,7 +82,7 @@ const App = () => {
           },
         ]}
       >
-        <Input.Password />
+        <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} />
       </Form.Item>
 
       <Form.Item
@@ -86,7 +95,7 @@ const App = () => {
           },
         ]}
       >
-        <Input />
+        <Input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
       </Form.Item>
 
       <Form.Item
@@ -99,7 +108,7 @@ const App = () => {
           },
         ]}
       >
-        <Input />
+        <Input value={lastName} onChange={(e) => setLastName(e.target.value)} />
       </Form.Item>
 
       <Form.Item
@@ -112,7 +121,7 @@ const App = () => {
           },
         ]}
       >
-        <Input />
+        <Input value={instagram} onChange={(e) => setInstagram(e.target.value)} />
       </Form.Item>
 
       <Form.Item
@@ -125,11 +134,11 @@ const App = () => {
           },
         ]}
       >
-        <Input />
+        <Input value={telegram} onChange={(e) => setTelegram(e.target.value)} />
       </Form.Item>
 
       <Form.Item label="Are you admin?" name="isAdmin" valuePropName="checked">
-          <Switch />
+          <Switch /* value={isAdmin} onClick={(e) => setIsAdmin(e.target.value)} */ />
       </Form.Item>
 
       <Form.Item {...tailLayout} >
