@@ -2,7 +2,7 @@ import axios from 'axios'
 import 'antd/dist/antd.css'
 import './App.css'
 
-import React, { useState } from 'react'
+import React from 'react'
 
 import { Form, Input, Button, Switch } from 'antd'
 
@@ -23,24 +23,16 @@ const tailLayout = {
 
 const App = () => {
 
-  const [login, setLogin] = useState(''),
-        [password, setPassword] = useState(''),
-        [firstName, setFirstName] = useState(''),
-        [lastName, setLastName] = useState(''),
-        [isAdmin, setIsAdmin] = useState(false),
-        [instagram, setInstagram] = useState(''),
-        [telegram, setTelegram] = useState('')
-
-    const onFinish = ({login, password, firstName, lastName, isAdmin, instagram, telegram}) => {
-      axios.post('https://typ-back.herokuapp.com/api/users/register', {
-        login,
-        password,
-        firstName,
-        lastName,
-        isAdmin,
-        instagram,
-        telegram,
-       "moduleId": 1
+  const onFinish = ({login, password, firstName, lastName, isAdmin, instagram, telegram}) => {
+    axios.post('https://typ-back.herokuapp.com/api/users/register', {
+      login,
+      password,
+      firstName,
+      lastName,
+      isAdmin,
+      instagram,
+      telegram,
+      "moduleId": 1
     }).then(({data}) => localStorage.setItem('token', data.token))
     }
  
@@ -63,82 +55,112 @@ const App = () => {
         label="Login"
         name="login"
         rules={[
-          {
-            required: true,
-            message: 'Please input your login!',
-          },
+          ({ getFieldValue }) => ({
+            validator(rule, value = "") {
+              if (!value.match(/^[a-z0-9_\.\@-]{3,20}$/)) {
+                return Promise.reject("Only letters, numbers and _ - . @");
+              } else {
+                return Promise.resolve();
+              }
+            }
+          })
         ]}
       >
-        <Input value={login} onChange={(e) => setLogin(e.target.value)} />
+        <Input />
       </Form.Item>
 
       <Form.Item
         label="Password"
         name="password"
         rules={[
-          {
-            required: true,
-            message: 'Please input your password!',
-          },
+          ({ getFieldValue }) => ({
+            validator(rule, value = "") {
+              if (!value.match(/^[a-z0-9_-]{6,20}$/)) {
+                return Promise.reject("Only letters, numbers and _ -");
+              } else {
+                return Promise.resolve();
+              }
+            }
+          })
         ]}
       >
-        <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} />
+        <Input.Password />
       </Form.Item>
 
       <Form.Item
         label="First Name"
         name="firstName"
         rules={[
-          {
-            required: true,
-            message: 'Please input your first name!',
-          },
+          ({ getFieldValue }) => ({
+            validator(rule, value = "") {
+              if (!value.match(/^[a-zA-Z]+$/)) {
+                return Promise.reject("Letters only");
+              } else {
+                return Promise.resolve();
+              }
+            }
+          })
         ]}
       >
-        <Input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+        <Input />
       </Form.Item>
 
       <Form.Item
         label="Last Name"
         name="lastName"
         rules={[
-          {
-            required: true,
-            message: 'Please input your last name!',
-          },
+          ({ getFieldValue }) => ({
+            validator(rule, value = "") {
+              if (!value.match(/^[a-zA-Z]+$/)) {
+                return Promise.reject("Letters only");
+              } else {
+                return Promise.resolve();
+              }
+            }
+          })
         ]}
       >
-        <Input value={lastName} onChange={(e) => setLastName(e.target.value)} />
+        <Input />
       </Form.Item>
 
       <Form.Item
         label="Instagram"
         name="instagram"
         rules={[
-          {
-            required: true,
-            message: 'Please input your instagram!',
-          },
+          ({ getFieldValue }) => ({
+            validator(rule, value = "") {
+              if (!value.match(/^[a-z0-9_\@-]{3,20}$/)) {
+                return Promise.reject("Only letters, numbers and _ - @");
+              } else {
+                return Promise.resolve();
+              }
+            }
+          })
         ]}
       >
-        <Input value={instagram} onChange={(e) => setInstagram(e.target.value)} />
+        <Input />
       </Form.Item>
 
       <Form.Item
         label="Telegram"
         name="telegram"
         rules={[
-          {
-            required: true,
-            message: 'Please input your telegram!',
-          },
+          ({ getFieldValue }) => ({
+            validator(rule, value = "") {
+              if (!value.match(/^[a-z0-9_\@-]{3,20}$/)) {
+                return Promise.reject("Only letters, numbers and _ - @");
+              } else {
+                return Promise.resolve();
+              }
+            }
+          })
         ]}
       >
-        <Input value={telegram} onChange={(e) => setTelegram(e.target.value)} />
+        <Input />
       </Form.Item>
 
-      <Form.Item label="Are you admin?" name="isAdmin" valuePropName="checked">
-          <Switch /* value={isAdmin} onClick={(e) => setIsAdmin(e.target.value)} */ />
+      <Form.Item label="Are you admin?" name="isAdmin" >
+          <Switch />
       </Form.Item>
 
       <Form.Item {...tailLayout} >
