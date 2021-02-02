@@ -1,6 +1,6 @@
 import axios from 'axios'
 import 'antd/dist/antd.css'
-import './App.css'
+import './Registration.css'
 
 import React from 'react'
 
@@ -21,7 +21,7 @@ const tailLayout = {
   },
 };
 
-const App = () => {
+const Registration = () => {
 
   const onFinish = ({login, password, firstName, lastName, isAdmin, instagram, telegram}) => {
     axios.post('https://typ-back.herokuapp.com/api/users/register', {
@@ -42,7 +42,7 @@ const App = () => {
   };
 
   return (
-    <Form className="app"
+    <Form className="registration"
       {...layout}
       name="basic"
       initialValues={{
@@ -159,8 +159,8 @@ const App = () => {
         <Input />
       </Form.Item>
 
-      <Form.Item label="Are you admin?" name="isAdmin" >
-          <Switch />
+      <Form.Item label="Are you admin?" name="isAdmin" valuePropName='checked' >
+          <Switch  />
       </Form.Item>
 
       <Form.Item {...tailLayout} >
@@ -172,4 +172,4 @@ const App = () => {
   );
 };
 
-export default App
+export default Registration
